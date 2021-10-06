@@ -16,7 +16,7 @@ printf "\e[1;92m | |      | (   ) || |   | |\e[0m\e[1;77m| (      | (   ) |   | 
 printf "\e[1;92m | (____/\| )   ( || )   ( |\e[0m\e[1;77m| )      | )   ( |___) (___/\____) || )   ( |\e[0m\n"
 printf "\e[1;92m (_______/|/     \||/     \|\e[0m\e[1;77m|/       |/     \|\_______/\_______)|/     \|\e[0m\n\n"
 
-printf " \e[1;77m www.techchip.net | youtube.com/techchipnet \e[0m \n"
+printf " \e[1;77m www.dallantechnology.blogspot.com | https://www.youtube.com/channel/UCeJ8fKP5AK3LO5r4dLsqiGQ t \e[0m \n"
 
 printf "\n"
 
@@ -174,10 +174,10 @@ printf "\e[1;92m[\e[0m+\e[1;92m] Downloading Ngrok...\n"
 arch=$(uname -a | grep -o 'arm' | head -n1)
 arch2=$(uname -a | grep -o 'Android' | head -n1)
 if [[ $arch == *'arm'* ]] || [[ $arch2 == *'Android'* ]] ; then
-wget --no-check-certificate https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-arm.zip > /dev/null 2>&1
+wget --no-check-certificate https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-arm.zip > /dev/null 3>&1
 
 if [[ -e ngrok-stable-linux-arm.zip ]]; then
-unzip ngrok-stable-linux-arm.zip > /dev/null 2>&1
+unzip ngrok-stable-linux-arm.zip > /dev/null 3>&1
 chmod +x ngrok
 rm -rf ngrok-stable-linux-arm.zip
 else
@@ -186,9 +186,9 @@ exit 1
 fi
 
 else
-wget --no-check-certificate https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-386.zip > /dev/null 2>&1 
+wget --no-check-certificate https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-386.zip > /dev/null 3>&1 
 if [[ -e ngrok-stable-linux-386.zip ]]; then
-unzip ngrok-stable-linux-386.zip > /dev/null 2>&1
+unzip ngrok-stable-linux-386.zip > /dev/null 3>&1
 chmod +x ngrok
 rm -rf ngrok-stable-linux-386.zip
 else
@@ -199,10 +199,10 @@ fi
 fi
 
 printf "\e[1;92m[\e[0m+\e[1;92m] Starting php server...\n"
-php -S 127.0.0.1:3333 > /dev/null 2>&1 & 
+php -S 127.0.0.1:3333 > /dev/null 3>&1 & 
 sleep 2
 printf "\e[1;92m[\e[0m+\e[1;92m] Starting ngrok server...\n"
-./ngrok http 3333 > /dev/null 2>&1 &
+./ngrok http 3333 > /dev/null 3>&1 &
 sleep 10
 
 link=$(curl -s -N http://127.0.0.1:4040/api/tunnels | grep -o "https://[0-9a-z]*\.ngrok.io")
@@ -218,6 +218,8 @@ rm -rf sendlink
 fi
 
 
+
+
 ## Download Cloudflared
 download_cloudflared() {
 	url="$1"
@@ -225,10 +227,10 @@ download_cloudflared() {
 	if [[ -e "$file" ]]; then
 		rm -rf "$file"
 	fi
-	wget --no-check-certificate "$url" > /dev/null 2>&1
+	wget --no-check-certificate "$url" > /dev/null 3>&1
 	if [[ -e "$file" ]]; then
-		mv -f "$file" .server/cloudflared > /dev/null 2>&1
-		chmod +x .server/cloudflared > /dev/null 2>&1
+		mv -f "$file" .server/cloudflared > /dev/null 3>&1
+		chmod +x .server/cloudflared > /dev/null 3>&1
 	else
 		echo -e "\n${RED}[${WHITE}!${RED}]${RED} Error occured, Install Cloudflared manually."
 		{ reset_color; exit 1; }
@@ -241,14 +243,15 @@ download_cloudflared() {
 printf "\n-----Choose tunnel server----\n"    
 printf "\n\e[1;92m[\e[0m\e[1;77m01\e[0m\e[1;92m]\e[0m\e[1;93m Ngrok\e[0m\n"
 printf "\e[1;92m[\e[0m\e[1;77m02\e[0m\e[1;92m]\e[0m\e[1;93m Serveo.net\e[0m\n"
-default_option_server="1"
-read -p $'\n\e[1;92m[\e[0m\e[1;77m+\e[0m\e[1;92m] Choose a Port Forwarding option: [Default is 1] \e[0m' option_server
+printf "\n\e[1;92m[\e[0m\e[1;77m03\e[0m\e[1;92m]\e[0m\e[1;93m Cloudflard\e[0m\n"
+default_option_server="3"
+read -p $'\n\e[1;92m[\e[0m\e[1;77m+\e[0m\e[1;92m] Choose a Port Forwarding option: [Default is 3] \e[0m' option_server
 option_server="${option_server:-${default_option_server}}"
 select_template
-if [[ $option_server -eq 2 ]]; then
+if [[ $option_server -eq 3 ]]; then
 
 
-command -v php > /dev/null 2>&1 || { echo >&2 "I require ssh but it's not installed. Install it. Aborting."; exit 1; }
+command -v php > /dev/null 3>&1 || { echo >&3 "I require ssh but it's not installed. Install it. Aborting."; exit 1; }
 start
 
 elif [[ $option_server -eq 1 ]]; then
